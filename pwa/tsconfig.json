@@ -21,6 +21,10 @@
       "@sbh/*": ["../storybook/helper/*"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src", 
+    "../storybook/stories",
+    "../storybook/helper"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
