@@ -5,5 +5,9 @@
   "license": "ISC",
   "dependencies": {
     "@undefined/lint": "github:JohnDeved/undefined-lint"
+  },
+  "scripts": {
+    "build": "npm run build --prefix",
+    "postinstall": "npm i --prefix pwa && npm i --prefix storybook"
   }
 }
