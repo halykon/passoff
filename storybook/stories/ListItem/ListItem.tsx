@@ -6,7 +6,7 @@ const pulsate = keyframes`
     color: var(--chakra-colors-primary-500);
    }
   to {
-    color: var(--chakra-colors-primary-900);
+    color: var(--chakra-colors-primary-1100);
   }
 `
 

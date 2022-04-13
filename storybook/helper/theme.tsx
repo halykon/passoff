@@ -15,6 +15,9 @@ function getShades (color: string) {
     700: Color(color).darken(0.2).hex(),
     800: Color(color).darken(0.3).hex(),
     900: Color(color).darken(0.4).hex(),
+    1000: Color(color).darken(0.5).hex(),
+    1100: Color(color).darken(0.6).hex(),
+    1200: Color(color).darken(0.7).hex(),
   }
 }
 
