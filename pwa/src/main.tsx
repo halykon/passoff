@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 import App from './App'
 import {defaultTheme, GlobalStyle} from '@sbh/theme'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
