@@ -4,6 +4,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "dev": "concurrently 'npm run dev:*'",
+    "build": "concurrently 'npm run build:*'",
     "dev:pwa": "vite pwa",
     "build:pwa": "tsc -p pwa && vite build pwa",
     "preview:pwa": "vite preview pwa",
@@ -39,6 +41,7 @@
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
     "babel-loader": "^8.2.4",
+    "concurrently": "^7.1.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.0",
     "webpack": "^5.72.0"
