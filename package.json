@@ -1,0 +1,9 @@
+{
+  "name": "passoff",
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@undefined/lint": "github:JohnDeved/undefined-lint"
+  }
+}

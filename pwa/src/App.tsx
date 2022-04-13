@@ -1,9 +1,10 @@
 import { Button } from '@sbc/Button/Button'
+import React from 'react'
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <Button text='Hello There'/>
+      <Button text="Hello There"/>
     </div>
   )
 }

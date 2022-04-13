@@ -9,7 +9,7 @@ addDecorator(story => (
   </>
 ))
 
-const theme = extendTheme(defaultTheme)
+const theme = extendTheme(defaultTheme);
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
