@@ -9,10 +9,10 @@ interface ISearchProps {
 export const Search: React.FC<ISearchProps> = () => {
   return (
     <InputGroup>
-      <InputLeftElement pointerEvents="none">
+      <InputLeftElement pointerEvents="none" h="100%">
         <SearchIcon/>
       </InputLeftElement>
-      <Input variant="filled" placeholder="Search Passwords" borderRadius={0}/>
+      <Input size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0}/>
     </InputGroup>
   )
 }
