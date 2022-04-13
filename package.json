@@ -7,7 +7,7 @@
     "@undefined/lint": "github:JohnDeved/undefined-lint"
   },
   "scripts": {
-    "build": "npm run build --prefix",
+    "build": "npm run build --prefix pwa",
     "postinstall": "npm i --prefix pwa && npm i --prefix storybook"
   }
 }
