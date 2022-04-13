@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { Search } from '@sbc/Search/Search'
 import { ListItem } from '@sbc/ListItem/ListItem'
 import { Button, Flex, Grid, GridItem } from '@chakra-ui/react'
@@ -25,18 +25,20 @@ const exampleList = [
 
 const App = () => {
   const parentRef = useArrowKeyNavigationHook({ selectors: 'button,input' })
-  const [selectedItem, setSelectedItem] = React.useState<typeof exampleList[0] | null>(null)
+  const [selectedItem, setSelectedItem] = useState<typeof exampleList[0] | null>(null)
+  const [searchValue, setSearchValue] = useState('')
+  const filteredList = useMemo(() => exampleList.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue])
 
   return (
     <Flex h="100vh" direction="column" ref={parentRef}>
-      <Search/>
+      <Search value={searchValue} onValueChange={setSearchValue}/>
       <Grid
         h="100%"
         templateColumns="repeat(2, 1fr)"
       >
         <GridItem>
-          {exampleList.map((item, index) => (
-            <ListItem key={`pw-list-item-${index}`} onSelect={() => setSelectedItem(item)} name={item.name} username={item.username}/>
+          {filteredList.map((item, index) => (
+            <ListItem key={`pw-list-item-${item.name}`} onSelect={() => setSelectedItem(item)} name={item.name} username={item.username}/>
           ))}
         </GridItem>
         <GridItem padding={5} bg="gray.900">
