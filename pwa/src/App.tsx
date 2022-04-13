@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Button } from '../../storybook/src/stories/Button/Button'
+import { Button } from '@sbc/Button/Button'
 
 function App() {
   return (
