@@ -39,6 +39,9 @@ export const defaultTheme: Partial<ChakraTheme> = {
       },
     },
   },
+  config: {
+    useSystemColorMode: true,
+  },
 }
 
 export const GlobalStyle: React.FC = () => (

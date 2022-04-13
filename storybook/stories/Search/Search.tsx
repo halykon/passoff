@@ -12,7 +12,7 @@ export const Search: React.FC<ISearchProps> = () => {
       <InputLeftElement pointerEvents="none">
         <SearchIcon/>
       </InputLeftElement>
-      <Input variant="filled" placeholder="Search something"/>
+      <Input variant="filled" placeholder="Search Passwords" borderRadius={0}/>
     </InputGroup>
   )
 }
