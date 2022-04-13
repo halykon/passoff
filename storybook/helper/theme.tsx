@@ -36,12 +36,12 @@ export const defaultTheme: Partial<ChakraTheme> = {
 export const GlobalStyle: React.FC = () => (
   <Global
     styles={css`
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600&display=swap');
+
       ::selection {
         color: white;
         background-color: ${colors.primary[500]};
       }
-      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600&display=swap');
     `}
-    
   />
 )

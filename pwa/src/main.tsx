@@ -9,8 +9,8 @@ const theme = extendTheme(defaultTheme)
 
 ReactDOM.render(
   <React.StrictMode>
-   <ChakraProvider theme={defaultTheme}>
-      <GlobalStyle/>
+    <GlobalStyle/>
+    <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
   </React.StrictMode>,
