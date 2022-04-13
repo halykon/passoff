@@ -1,7 +1,7 @@
 import type { ChakraTheme } from '@chakra-ui/react'
-import React from 'react'
-import Color from 'color'
 import { css, Global } from '@emotion/react'
+import Color from 'color'
+import React from 'react'
 
 function getShades (color: string) {
   return {
@@ -31,6 +31,7 @@ export const defaultTheme: Partial<ChakraTheme> = {
   // button active border color
   shadows: {
     outline: `0 0 0 3px ${Color(colors.primary[500]).fade(0.7).toString()}`,
+    active: `0 0 0 3px ${colors.primary[500]}`,
   },
   components: {
     Button: {
