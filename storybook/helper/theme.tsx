@@ -28,8 +28,16 @@ export const defaultTheme: Partial<ChakraTheme> = {
     heading: 'Poppins',
     body: 'poppins',
   },
+  // button active border color
   shadows: {
     outline: `0 0 0 3px ${Color(colors.primary[500]).fade(0.7).toString()}`,
+  },
+  components: {
+    Input: {
+      defaultProps: {
+        focusBorderColor: 'primary.500',
+      },
+    },
   },
 }
 

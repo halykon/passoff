@@ -1,10 +1,10 @@
-import { Button } from '@sbc/Button/Button'
 import React from 'react'
+import { Search } from '@sbc/Search/Search'
 
 const App = () => {
   return (
     <div className="App">
-      <Button text="Hello There"/>
+      <Search/>
     </div>
   )
 }

@@ -7,6 +7,7 @@
     "build": "build-storybook"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@chakra-ui/storybook-addon": "^2.0.0-next.0",
     "@emotion/react": "^11.9.0",
