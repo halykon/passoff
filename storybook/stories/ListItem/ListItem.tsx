@@ -18,16 +18,13 @@ interface IListItemProps {
 
 export const ListItem: React.FC<IListItemProps> = ({ onSelect, name, username }) => {
   return (
-    <Box p="2px">
+    <Box p="2px" _hover={{ bg: 'blackAlpha.300' }}>
       <Button
         onFocus={onSelect}
         variant="box"
         display="flex"
         p="15px"
         color="primary.500"
-        _hover={{
-          bg: 'blackAlpha.300',
-        }}
         _focus={{
           animation: `${pulsate} 1s 1s infinite alternate`,
           bg: 'var(--chakra-colors-blackAlpha-500) !important', // little hack to hover style

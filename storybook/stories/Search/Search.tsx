@@ -10,12 +10,10 @@ interface ISearchProps {
 
 export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
   const inputRef = useRef<HTMLInputElement>(null)
-
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  useHotkeys('ctrl+space', () => {
-    inputRef.current?.focus()
-  })
+  useHotkeys('space', () => inputRef.current?.focus(), { keyup: true })
+  useHotkeys('ctrl+space,left', () => inputRef.current?.focus())
 
   return (
     <Box>
@@ -24,9 +22,9 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
         <InputLeftElement pointerEvents="none" h="100%">
           <SearchIcon/>
         </InputLeftElement>
-        <Input onFocus={onOpen} onBlur={onClose} ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0} value={value} onChange={e => onValueChange(e.target.value)}/>
+        <Input onFocus={onOpen} onBlur={onClose} ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0} value={value} onChange={e => onValueChange(e.target.value.trimStart())}/>
         <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="30px" opacity=".35">
-          <Box>press <Kbd>ctrl</Kbd> + <Kbd>space</Kbd> to search</Box>
+          <Box>press <Kbd>space</Kbd> to search</Box>
         </InputRightElement>
       </InputGroup>
       {/* Popover */}

@@ -38,7 +38,7 @@ const App = () => {
             <ListItem key={`pw-list-item-${item.name}`} onSelect={() => setSelectedItem(item)} name={item.name} username={item.username}/>
           ))}
         </GridItem>
-        <GridItem padding={5} bg="gray.900">
+        <GridItem padding={5} bg="blackAlpha.400">
           {selectedItem?.name}
         </GridItem>
       </Grid>
