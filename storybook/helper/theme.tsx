@@ -60,7 +60,8 @@ export const defaultTheme: Partial<ChakraTheme> = {
     },
   },
   config: {
-    useSystemColorMode: true,
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
   },
 }
 

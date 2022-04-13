@@ -44,8 +44,7 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
         <Portal>
           <PopoverContent>
             <PopoverArrow/>
-            <PopoverCloseButton/>
-            <PopoverBody>
+            <PopoverBody textAlign="center">
               navigate with <Kbd>↓</Kbd> and <Kbd>↑</Kbd>
             </PopoverBody>
           </PopoverContent>
