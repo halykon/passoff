@@ -4,9 +4,9 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "dev:vite": "vite pwa",
-    "build:vite": "tsc -p pwa && vite build pwa",
-    "preview:vite": "vite preview pwa",
+    "dev:pwa": "vite pwa",
+    "build:pwa": "tsc -p pwa && vite build pwa",
+    "preview:pwa": "vite preview pwa",
     "dev:storybook": "cd storybook && start-storybook -p 6006",
     "build:storybook": "cd storybook && build-storybook"
   },
