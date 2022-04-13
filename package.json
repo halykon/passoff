@@ -3,11 +3,44 @@
   "version": "1.0.0",
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@undefined/lint": "github:JohnDeved/undefined-lint"
-  },
   "scripts": {
-    "build": "npm run build --prefix pwa",
-    "postinstall": "npm i --prefix pwa && npm i --prefix storybook"
+    "dev:vite": "vite pwa",
+    "build:vite": "tsc -p pwa && vite build pwa",
+    "preview:vite": "vite preview pwa",
+    "dev:storybook": "cd storybook && start-storybook -p 6006",
+    "build:storybook": "cd storybook && build-storybook"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
+    "@chakra-ui/react": "^1.8.8",
+    "@chakra-ui/storybook-addon": "^1.0.3",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@undefined/lint": "github:JohnDeved/undefined-lint",
+    "color": "^4.2.3",
+    "framer-motion": "^5.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "vite-tsconfig-paths": "^3.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@storybook/addon-actions": "^6.5.0-alpha.61",
+    "@storybook/addon-essentials": "^6.5.0-alpha.61",
+    "@storybook/addon-interactions": "^6.5.0-alpha.61",
+    "@storybook/addon-links": "^6.5.0-alpha.61",
+    "@storybook/builder-webpack5": "^6.5.0-alpha.61",
+    "@storybook/manager-webpack5": "^6.5.0-alpha.61",
+    "@storybook/react": "^6.5.0-alpha.61",
+    "@storybook/testing-library": "^0.0.9",
+    "@types/babel__core": "^7.1.19",
+    "@types/color": "^3.0.3",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "babel-loader": "^8.2.4",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.0",
+    "webpack": "^5.72.0"
   }
 }
