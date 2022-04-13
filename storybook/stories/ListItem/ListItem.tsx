@@ -8,15 +8,13 @@ interface IListItemProps {
 export const ListItem: React.FC<IListItemProps> = () => {
   return (
     <Button
-      variant="unstyled"
-      borderRadius="none"
-      h="100%"
-      w="100%"
+      variant="box"
       display="flex"
       p="15px"
-      fontWeight="unset"
-      justifyContent="left"
-      textAlign="left"
+      _focus={{
+        bg: 'blackAlpha.500',
+        shadow: 'outline',
+      }}
       _hover={{
         bg: 'blackAlpha.300',
       }}

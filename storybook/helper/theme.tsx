@@ -33,6 +33,22 @@ export const defaultTheme: Partial<ChakraTheme> = {
     outline: `0 0 0 3px ${Color(colors.primary[500]).fade(0.7).toString()}`,
   },
   components: {
+    Button: {
+      variants: {
+        box: {
+          borderRadius: 'none',
+          h: '100%',
+          w: '100%',
+          fontWeight: 'unset',
+          justifyContent: 'left',
+          textAlign: 'left',
+          _focus: {
+            shadow: 'outline',
+          },
+        },
+      },
+    },
+
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.500',
