@@ -19,7 +19,7 @@ export const Search: React.FC<ISearchProps> = () => {
         <SearchIcon/>
       </InputLeftElement>
       <Input ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0}/>
-      <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="30px">
+      <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="30px" opacity=".35">
         <Box>press <Kbd>ctrl</Kbd> + <Kbd>space</Kbd> to search</Box>
       </InputRightElement>
     </InputGroup>
