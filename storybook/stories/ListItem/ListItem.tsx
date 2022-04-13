@@ -47,5 +47,6 @@ export const ListItem: React.FC<IListItemProps> = ({ onSelect, name, username })
 }
 
 ListItem.defaultProps = {
-
+  name: 'Google',
+  username: 'johann@objekt.stream',
 }

@@ -30,13 +30,10 @@ const App = () => {
   const filteredList = useMemo(() => exampleList.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue])
 
   return (
-    <Flex h="100vh" direction="column" ref={parentRef}>
-      <Search value={searchValue} onValueChange={setSearchValue}/>
-      <Grid
-        h="100%"
-        templateColumns="repeat(2, 1fr)"
-      >
-        <GridItem>
+    <Flex h="100vh" direction="column">
+      <Grid h="100%" templateColumns="repeat(2, 1fr)">
+        <GridItem ref={parentRef}>
+          <Search value={searchValue} onValueChange={setSearchValue}/>
           {filteredList.map((item, index) => (
             <ListItem key={`pw-list-item-${item.name}`} onSelect={() => setSelectedItem(item)} name={item.name} username={item.username}/>
           ))}
