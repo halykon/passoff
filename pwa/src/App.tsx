@@ -6,19 +6,19 @@ import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
 
 const exampleList = [
   {
-    name: 'Google.com',
+    name: 'Google',
     username: 'johann@objekt.stream',
   },
   {
-    name: 'Facebook.com',
+    name: 'Facebook',
     username: 'johann@objekt.stream',
   },
   {
-    name: 'Twitter.com',
+    name: 'Twitter',
     username: 'johann@objekt.stream',
   },
   {
-    name: 'Instagram.com',
+    name: 'Instagram',
     username: 'johann@objekt.stream',
   },
 ]
@@ -36,7 +36,7 @@ const App = () => {
       >
         <GridItem>
           {exampleList.map((item, index) => (
-            <ListItem key={`pw-list-item-${index}`} onSelect={() => setSelectedItem(item)}/>
+            <ListItem key={`pw-list-item-${index}`} onSelect={() => setSelectedItem(item)} name={item.name} username={item.username}/>
           ))}
         </GridItem>
         <GridItem padding={5} bg="gray.900">

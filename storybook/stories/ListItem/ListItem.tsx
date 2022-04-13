@@ -11,32 +11,34 @@ const pulsate = keyframes`
 `
 
 interface IListItemProps {
+  name: string
+  username: string
   onSelect?: () => void
 }
 
-export const ListItem: React.FC<IListItemProps> = ({ onSelect }) => {
+export const ListItem: React.FC<IListItemProps> = ({ onSelect, name, username }) => {
   return (
     <Box p="2px">
       <Button
+        onFocus={onSelect}
         variant="box"
         display="flex"
         p="15px"
+        color="primary.500"
         _hover={{
           bg: 'blackAlpha.300',
         }}
-        color="primary.500"
         _focus={{
           animation: `${pulsate} 1s 1s infinite alternate`,
           bg: 'var(--chakra-colors-blackAlpha-500) !important', // little hack to hover style
           shadow: '0 0 0 2px',
         }}
-        onFocus={onSelect}
       >
         <Stack direction="row" spacing="15px" color="white">
-          <Avatar name="Google"/>
+          <Avatar name={name}/>
           <Box>
-            <Heading size="md">Google.com</Heading>
-            <Text size="md">johann@objekt.stream</Text>
+            <Heading size="md">{name}</Heading>
+            <Text size="md">{username}</Text>
           </Box>
         </Stack>
       </Button>
