@@ -18,7 +18,7 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
 
   const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')
-  const filteredList = useMemo(() => list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue])
+  const filteredList = useMemo(() => list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue, list])
 
   console.log(itemArrowNavRef)
   useHotkeys('left', () => {
@@ -64,21 +64,25 @@ MainGrid.defaultProps = {
       id: '1',
       name: 'Google',
       username: 'johann@objekt.stream',
+      password: 'supersecret42',
     },
     {
       id: '2',
       name: 'Facebook',
       username: 'johann@objekt.stream',
+      password: 'supersecret42',
     },
     {
       id: '3',
       name: 'Twitter',
       username: 'undefined_prop',
+      password: 'supersecret42',
     },
     {
       id: '4',
       name: 'Instagram',
       username: 'johann@objekt.stream',
+      password: 'supersecret42',
     },
   ],
 }

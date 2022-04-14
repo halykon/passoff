@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Stack, useBoolean, useToast } from '@chakra-ui/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import copy from 'copy-to-clipboard'
@@ -7,6 +7,7 @@ export interface IListData {
   id: string
   name: string
   username: string
+  password: string
 }
 
 interface IListDataBoxProps {
@@ -18,7 +19,21 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
 
+  const [edited, setEdited] = useState<Partial<IListData>>(listData)
+
+  const onEdit = useCallback((key: keyof IListData) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEdited({ ...edited, [key]: event.target.value })
+    }
+  }, [edited, setEdited])
+
+  const onCancel = useCallback(() => {
+    setIsEditing.off()
+    setEdited(listData)
+  }, [setIsEditing, setEdited, listData])
+
   useHotkeys('right', () => buttonRef.current?.focus())
+
   useHotkeys('u', () => {
     copy(listData.username)
     toast({
@@ -26,24 +41,43 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
     })
   }, [listData.username])
 
+  useHotkeys('p', () => {
+    copy(listData.password)
+    toast({
+      description: 'Password copied to clipboard',
+    })
+  }, [listData.password])
+
   return (
     <Stack spacing={5}>
-      <Stack direction="row" justify="end">
-        <Button className="selectable" ref={buttonRef} onClick={setIsEditing.toggle}>Edit</Button>
+      <Stack direction="row" justify="space-between">
+        <Stack direction="row">
+          {isEditing && <Button className="selectable" onClick={setIsEditing.toggle}>Save</Button>}
+          <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
+        </Stack>
         <Button colorScheme="red">Delete</Button>
       </Stack>
       <FormControl>
         <FormLabel htmlFor="name">Name</FormLabel>
         <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" value={listData.name}/>
+          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
         </InputGroup>
       </FormControl>
       <FormControl>
         <FormLabel htmlFor="username">Username</FormLabel>
         <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" value={listData.username}/>
+          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
           <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
             <Box>copy <Kbd>U</Kbd></Box>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="username">Password</FormLabel>
+        <InputGroup>
+          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="password" onChange={onEdit('password')} value={edited.password}/>
+          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
+            <Box>copy <Kbd>P</Kbd></Box>
           </InputRightElement>
         </InputGroup>
       </FormControl>
@@ -56,5 +90,6 @@ ListDataBox.defaultProps = {
     id: '',
     name: 'Twitter',
     username: 'undefined_prop',
+    password: 'supersecret42',
   },
 }
