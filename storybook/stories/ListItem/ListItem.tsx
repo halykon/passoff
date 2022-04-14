@@ -21,6 +21,7 @@ export const ListItem: React.FC<IListItemProps> = ({ onSelect, isActive, name, u
   return (
     <Box p="2px" transition=".35s" bg={isActive ? 'blackAlpha.500' : ''} _hover={{ bg: 'blackAlpha.300' }} _focusWithin={{ bg: 'var(--chakra-colors-blackAlpha-500) !important' }}>
       <Button
+        isActive={isActive}
         onFocus={onSelect}
         variant="box"
         display="flex"

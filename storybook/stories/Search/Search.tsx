@@ -13,7 +13,7 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useHotkeys('space', () => inputRef.current?.focus(), { keyup: true })
-  useHotkeys('ctrl+space,left', () => inputRef.current?.focus())
+  useHotkeys('ctrl+space', () => inputRef.current?.focus())
 
   return (
     <Box>

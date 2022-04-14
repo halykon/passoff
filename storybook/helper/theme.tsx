@@ -33,7 +33,7 @@ export const defaultTheme: Partial<ChakraTheme> = {
   },
   // button active border color
   shadows: {
-    outline: `0 0 0 3px ${Color(colors.primary[500]).fade(0.7).toString()}`,
+    outline: `0 0 0 3px ${colors.primary[500]}`,
     active: `0 0 0 3px ${colors.primary[500]}`,
   },
   components: {

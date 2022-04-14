@@ -1,48 +1,52 @@
 import { Center, FormControl, FormLabel, Grid, GridItem, Heading, Input, Stack } from '@chakra-ui/react'
+import type { MutableRefObject } from 'react'
 import React, { useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
+import { useHotkeys } from 'react-hotkeys-hook'
+import type { IListData } from '../ListDataBox/ListDataBox'
+import { ListDataBox } from '../ListDataBox/ListDataBox'
 import { ListItem } from '../ListItem/ListItem'
 import { Search } from '../Search/Search'
 
-interface IListItem {
-  id: string
-  name: string
-  username: string
-}
-
 interface IMainGridProps {
-  list: IListItem[]
+  list: IListData[]
 }
 
 export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
-  const listArrowNavRef = useArrowKeyNavigationHook({ selectors: 'button,input' })
-  const itemArrowNavRef = useArrowKeyNavigationHook({ selectors: 'input' })
+  const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: 'button,input' })
+  const itemArrowNavRef = useArrowKeyNavigationHook({ selectors: '.selectable,input' })
 
-  const [selectedItem, setSelectedItem] = useState<IListItem | null>(null)
+  const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')
   const filteredList = useMemo(() => list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue])
+
+  console.log(itemArrowNavRef)
+  useHotkeys('left', () => {
+    const activeListItem = listArrowNavRef.current.querySelector<HTMLButtonElement>('[data-active]')
+    if (activeListItem) return activeListItem.focus()
+
+    const searchInput = listArrowNavRef.current.querySelector<HTMLInputElement>('input')
+    if (searchInput) return searchInput.focus()
+  })
 
   return (
     <Grid h="100%" templateColumns="repeat(2, 1fr)">
       <GridItem ref={listArrowNavRef}>
         <Search value={searchValue} onValueChange={setSearchValue}/>
         {filteredList.map((item, index) => (
-          <ListItem key={`pw-list-item-${item.id}`} onSelect={() => setSelectedItem(item)} isActive={selectedItem?.id === item.id} name={item.name} username={item.username}/>
+          <ListItem
+            key={`pw-list-item-${item.id}`}
+            onSelect={() => setSelectedItem(item)}
+            isActive={selectedItem?.id === item.id}
+            name={item.name}
+            username={item.username}
+          />
         ))}
       </GridItem>
       <GridItem padding={5} bg="blackAlpha.400" ref={itemArrowNavRef}>
         {selectedItem
           ? (
-            <Stack spacing={5}>
-              <FormControl>
-                <FormLabel htmlFor="name">Name</FormLabel>
-                <Input variant="filled" id="name" type="text" value={selectedItem.name}/>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="username">Username</FormLabel>
-                <Input variant="filled" id="username" type="text" value={selectedItem.username}/>
-              </FormControl>
-            </Stack>
+            <ListDataBox listData={selectedItem}/>
             )
           : (
             <Center h="100%">
