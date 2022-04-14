@@ -45,7 +45,7 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
       <GridItem padding={5} bg="blackAlpha.400" ref={itemArrowNavRef}>
         {selectedItem
           ? (
-            <ListDataBox key={selectedItem.id} listData={selectedItem}/>
+            <ListDataBox key={selectedItem.id} listData={selectedItem} onUnselect={() => setSelectedItem(null)}/>
             )
           : (
             <Center h="100%">

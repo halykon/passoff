@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Stack, useBoolean, useToast } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import copy from 'copy-to-clipboard'
 import type { IData } from '../../hooks/data'
@@ -9,13 +9,14 @@ export interface IListData extends IData {}
 
 interface IListDataBoxProps {
   listData: IListData
+  onUnselect?: () => void
 }
 
-export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
+export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect }) => {
   const [isEditing, setIsEditing] = useBoolean()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
-  const { setDataById } = useData()
+  const { setDataById, delDataById } = useData()
   const [edited, setEdited] = useState<Partial<IListData>>(listData)
   const [showPassword, setShowPassword] = useBoolean(false)
 
@@ -42,8 +43,6 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
     })
   }, [edited, listData, setDataById, toast, setIsEditing])
 
-  useHotkeys('right', () => buttonRef.current?.focus())
-
   const copyData = useCallback((key: keyof IListData) => {
     return () => {
       const data = edited[key]
@@ -57,6 +56,19 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
     }
   }, [edited, toast])
 
+  const onDelete = useCallback(() => {
+    delDataById?.(listData.id)
+    onUnselect?.()
+    toast({
+      title: 'Deleted',
+      description: 'Your item has been deleted',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }, [toast, listData, delDataById, onUnselect])
+
+  useHotkeys('right', () => buttonRef.current?.focus())
   useHotkeys('u', copyData('username'), [listData.username])
   useHotkeys('p', copyData('password'), [listData.password])
 
@@ -67,7 +79,23 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
           {isEditing && <Button className="selectable" onClick={onSave}>Save</Button>}
           <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
         </Stack>
-        <Button colorScheme="red">Delete</Button>
+        <Popover>
+          <PopoverTrigger>
+            <Button colorScheme="red">Delete</Button>
+          </PopoverTrigger>
+          <Portal>
+            <PopoverContent>
+              <PopoverArrow/>
+              <PopoverHeader fontWeight="bold">Are you sure?</PopoverHeader>
+              <PopoverCloseButton/>
+              <PopoverBody>
+                <Box>Are you sure about this?</Box>
+                <Box>This action cannot be undone.</Box>
+              </PopoverBody>
+              <PopoverFooter display="flex" justifyContent="end"><Button colorScheme="red" onClick={onDelete}>Yes, I am sure.</Button></PopoverFooter>
+            </PopoverContent>
+          </Portal>
+        </Popover>
       </Stack>
       <FormControl>
         <FormLabel htmlFor="name">Name</FormLabel>
