@@ -73,7 +73,7 @@ MainGrid.defaultProps = {
     {
       id: '3',
       name: 'Twitter',
-      username: 'johann@objekt.stream',
+      username: 'undefined_prop',
     },
     {
       id: '4',
