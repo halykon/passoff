@@ -22,7 +22,6 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
   useHotkeys('u', () => {
     copy(listData.username)
     toast({
-      title: 'Copied!',
       description: 'Username copied to clipboard',
     })
   }, [listData.username])
