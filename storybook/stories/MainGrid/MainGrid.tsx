@@ -20,7 +20,6 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
   const [searchValue, setSearchValue] = useState('')
   const filteredList = useMemo(() => list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue, list])
 
-  console.log(itemArrowNavRef)
   useHotkeys('left', () => {
     const activeListItem = listArrowNavRef.current.querySelector<HTMLButtonElement>('[data-active]')
     if (activeListItem) return activeListItem.focus()
@@ -46,7 +45,7 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
       <GridItem padding={5} bg="blackAlpha.400" ref={itemArrowNavRef}>
         {selectedItem
           ? (
-            <ListDataBox listData={selectedItem}/>
+            <ListDataBox key={selectedItem.id} listData={selectedItem}/>
             )
           : (
             <Center h="100%">
