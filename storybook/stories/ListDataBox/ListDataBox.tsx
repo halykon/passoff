@@ -101,14 +101,14 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
             </Portal>
           </Popover>
         </Stack>
-        <FormControl>
-          <FormLabel htmlFor="name">Name</FormLabel>
+        <FormControl bg="gray.800" p="5px" borderRadius="md">
+          <FormLabel pl="4px" htmlFor="name">Name</FormLabel>
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
           </InputGroup>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="username">Username</FormLabel>
+        <FormControl bg="gray.800" p="5px" borderRadius="md">
+          <FormLabel pl="4px" htmlFor="username">Username</FormLabel>
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
@@ -116,8 +116,8 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="username">Password</FormLabel>
+        <FormControl bg="gray.800" p="5px" borderRadius="md">
+          <FormLabel pl="4px" htmlFor="username">Password</FormLabel>
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
