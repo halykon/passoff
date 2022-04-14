@@ -1,5 +1,5 @@
 import { AddIcon, SearchIcon } from '@chakra-ui/icons'
-import { Box, Flex, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Portal, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Portal, Show, useDisclosure } from '@chakra-ui/react'
 import React, { useRef } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -24,9 +24,11 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
             <SearchIcon/>
           </InputLeftElement>
           <Input onFocus={onOpen} onBlur={onClose} ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0} value={value} onChange={e => onValueChange(e.target.value.trimStart())}/>
-          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
-            <Box>press <Kbd>space</Kbd> to search</Box>
-          </InputRightElement>
+          <Show above="lg">
+            <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
+              <Box>press <Kbd>space</Kbd> to search</Box>
+            </InputRightElement>
+          </Show>
         </InputGroup>
         <IconButton borderRadius="none" size="lg" aria-label="add" icon={<AddIcon/>}/>
       </Flex>

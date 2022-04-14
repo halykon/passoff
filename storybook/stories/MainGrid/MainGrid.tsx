@@ -1,4 +1,4 @@
-import { Center, Grid, GridItem, Heading } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Heading, Show } from '@chakra-ui/react'
 import type { MutableRefObject } from 'react'
 import React, { useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
@@ -30,7 +30,7 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
 
   return (
     <Grid h="100%" templateColumns="repeat(2, 1fr)">
-      <GridItem ref={listArrowNavRef}>
+      <GridItem ref={listArrowNavRef} colSpan={[2, 2, 1]}>
         <Search value={searchValue} onValueChange={setSearchValue}/>
         {filteredList.map(item => (
           <ListItem
@@ -42,17 +42,19 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
           />
         ))}
       </GridItem>
-      <GridItem padding={5} bg="blackAlpha.400" ref={itemArrowNavRef}>
-        {selectedItem
-          ? (
-            <ListDataBox key={selectedItem.id} listData={selectedItem} onUnselect={() => setSelectedItem(null)}/>
-            )
-          : (
-            <Center h="100%">
-              <Heading size="xl" opacity={0.1}>No item selected</Heading>
-            </Center>
-            )}
-      </GridItem>
+      <Show above="md">
+        <GridItem padding={5} bg="blackAlpha.400" ref={itemArrowNavRef}>
+          {selectedItem
+            ? (
+              <ListDataBox key={selectedItem.id} listData={selectedItem} onUnselect={() => setSelectedItem(null)}/>
+              )
+            : (
+              <Center h="100%">
+                <Heading size="xl" opacity={0.1}>No item selected</Heading>
+              </Center>
+              )}
+        </GridItem>
+      </Show>
     </Grid>
   )
 }
