@@ -5,7 +5,7 @@ import React from 'react'
 const App = () => {
   return (
     <Box h="100vh">
-      <MainGrid/>
+      <MainGrid {...{} as any}/>
     </Box>
   )
 }
