@@ -1,4 +1,4 @@
-import { Center, FormControl, FormLabel, Grid, GridItem, Heading, Input, Stack } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Heading } from '@chakra-ui/react'
 import type { MutableRefObject } from 'react'
 import React, { useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
@@ -14,7 +14,7 @@ interface IMainGridProps {
 
 export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
   const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: 'button,input' })
-  const itemArrowNavRef = useArrowKeyNavigationHook({ selectors: '.selectable,input' })
+  const itemArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable,input' })
 
   const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')
@@ -32,7 +32,7 @@ export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
     <Grid h="100%" templateColumns="repeat(2, 1fr)">
       <GridItem ref={listArrowNavRef}>
         <Search value={searchValue} onValueChange={setSearchValue}/>
-        {filteredList.map((item, index) => (
+        {filteredList.map(item => (
           <ListItem
             key={`pw-list-item-${item.id}`}
             onSelect={() => setSelectedItem(item)}

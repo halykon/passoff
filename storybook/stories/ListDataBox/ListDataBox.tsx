@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
-import { useHotkeys } from 'react-hotkeys-hook'
+import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
+import React, { useCallback, useRef, useState } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 import type { IData } from '../../hooks/data'
 import { useData } from '../../hooks/data'
 
