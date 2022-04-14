@@ -23,7 +23,7 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
           <InputLeftElement pointerEvents="none" h="100%">
             <SearchIcon/>
           </InputLeftElement>
-          <Input onFocus={onOpen} onBlur={onClose} ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0} value={value} onChange={e => onValueChange(e.target.value.trimStart())}/>
+          <Input className="selectable" onFocus={onOpen} onBlur={onClose} ref={inputRef} size="lg" variant="filled" placeholder="Search Passwords" borderRadius={0} value={value} onChange={e => onValueChange(e.target.value.trimStart())}/>
           <Show above="lg">
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
               <Box>press <Kbd>space</Kbd> to search</Box>

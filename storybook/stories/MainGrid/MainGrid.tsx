@@ -13,8 +13,8 @@ interface IMainGridProps {
 }
 
 export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
-  const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: 'button,input' })
-  const itemArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable,input' })
+  const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
+  const itemArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
 
   const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')

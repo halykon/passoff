@@ -104,13 +104,13 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
         <FormControl>
           <FormLabel htmlFor="name">Name</FormLabel>
           <InputGroup>
-            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
+            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
           </InputGroup>
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="username">Username</FormLabel>
           <InputGroup>
-            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
+            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
               <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>
             </InputRightElement>
@@ -119,7 +119,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
         <FormControl>
           <FormLabel htmlFor="username">Password</FormLabel>
           <InputGroup>
-            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
+            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
               <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
             </InputRightElement>
