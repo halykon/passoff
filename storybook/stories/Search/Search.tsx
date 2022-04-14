@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
-import { Box, Button, ButtonGroup, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, useDisclosure } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
+import { Box, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Portal, useDisclosure } from '@chakra-ui/react'
+import React, { useRef } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 interface ISearchProps {
