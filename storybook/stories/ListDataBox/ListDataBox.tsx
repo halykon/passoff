@@ -16,8 +16,8 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
   const { setDataById } = useData()
-
   const [edited, setEdited] = useState<Partial<IListData>>(listData)
+  const [showPassword, setShowPassword] = useBoolean(false)
 
   const onEdit = useCallback((key: keyof IListData) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,19 +44,21 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
 
   useHotkeys('right', () => buttonRef.current?.focus())
 
-  useHotkeys('u', () => {
-    copy(listData.username)
-    toast({
-      description: 'Username copied to clipboard',
-    })
-  }, [listData.username])
+  const copyData = useCallback((key: keyof IListData) => {
+    return () => {
+      const data = edited[key]
+      if (data) {
+        copy(data)
+        toast({
+          description: `${key} copied to clipboard`,
+          status: 'success',
+        })
+      }
+    }
+  }, [edited, toast])
 
-  useHotkeys('p', () => {
-    copy(listData.password)
-    toast({
-      description: 'Password copied to clipboard',
-    })
-  }, [listData.password])
+  useHotkeys('u', copyData('username'), [listData.username])
+  useHotkeys('p', copyData('password'), [listData.password])
 
   return (
     <Stack spacing={5}>
@@ -77,17 +79,17 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
         <FormLabel htmlFor="username">Username</FormLabel>
         <InputGroup>
           <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
-          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
-            <Box>copy <Kbd>U</Kbd></Box>
+          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
+            <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
       <FormControl>
         <FormLabel htmlFor="username">Password</FormLabel>
         <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="password" onChange={onEdit('password')} value={edited.password}/>
-          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" pr="15px" opacity=".35">
-            <Box>copy <Kbd>P</Kbd></Box>
+          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
+          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
+            <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
