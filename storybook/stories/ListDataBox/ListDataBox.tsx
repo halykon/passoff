@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
+import { Avatar, Box, Button, Center, FormControl, FormLabel, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import React, { useCallback, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -69,59 +69,64 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
   }, [toast, listData, delDataById, onUnselect])
 
   useHotkeys('right', () => buttonRef.current?.focus())
-  useHotkeys('u', copyData('username'), [listData.username])
-  useHotkeys('p', copyData('password'), [listData.password])
+  useHotkeys('u', copyData('username'), [copyData])
+  useHotkeys('p', copyData('password'), [copyData])
 
   return (
-    <Stack spacing={5}>
-      <Stack direction="row" justify="space-between">
-        <Stack direction="row">
-          {isEditing && <Button className="selectable" onClick={onSave}>Save</Button>}
-          <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
+    <Box>
+      <Center w="100%" h="150px" bg="primary.600">
+        <Avatar size="xl" name={edited.name}/>
+      </Center>
+      <Stack spacing={5} padding={5}>
+        <Stack direction="row" justify="space-between">
+          <Stack direction="row">
+            {isEditing && <Button className="selectable" onClick={onSave}>Save</Button>}
+            <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
+          </Stack>
+          <Popover>
+            <PopoverTrigger>
+              <Button colorScheme="red">Delete</Button>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent>
+                <PopoverArrow/>
+                <PopoverHeader fontWeight="bold">Are you sure?</PopoverHeader>
+                <PopoverCloseButton/>
+                <PopoverBody>
+                  <Box>Are you sure about this?</Box>
+                  <Box>This action cannot be undone.</Box>
+                </PopoverBody>
+                <PopoverFooter display="flex" justifyContent="end"><Button colorScheme="red" onClick={onDelete}>Yes, I am sure.</Button></PopoverFooter>
+              </PopoverContent>
+            </Portal>
+          </Popover>
         </Stack>
-        <Popover>
-          <PopoverTrigger>
-            <Button colorScheme="red">Delete</Button>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent>
-              <PopoverArrow/>
-              <PopoverHeader fontWeight="bold">Are you sure?</PopoverHeader>
-              <PopoverCloseButton/>
-              <PopoverBody>
-                <Box>Are you sure about this?</Box>
-                <Box>This action cannot be undone.</Box>
-              </PopoverBody>
-              <PopoverFooter display="flex" justifyContent="end"><Button colorScheme="red" onClick={onDelete}>Yes, I am sure.</Button></PopoverFooter>
-            </PopoverContent>
-          </Portal>
-        </Popover>
+        <FormControl>
+          <FormLabel htmlFor="name">Name</FormLabel>
+          <InputGroup>
+            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
+          </InputGroup>
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor="username">Username</FormLabel>
+          <InputGroup>
+            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
+            <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
+              <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor="username">Password</FormLabel>
+          <InputGroup>
+            <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
+            <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
+              <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
       </Stack>
-      <FormControl>
-        <FormLabel htmlFor="name">Name</FormLabel>
-        <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="name" type="text" onChange={onEdit('name')} value={edited.name}/>
-        </InputGroup>
-      </FormControl>
-      <FormControl>
-        <FormLabel htmlFor="username">Username</FormLabel>
-        <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
-          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
-            <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
-      <FormControl>
-        <FormLabel htmlFor="username">Password</FormLabel>
-        <InputGroup>
-          <Input disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
-          <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
-            <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
-    </Stack>
+    </Box>
   )
 }
 

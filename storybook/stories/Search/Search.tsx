@@ -33,26 +33,28 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
         <IconButton borderRadius="none" size="lg" aria-label="add" icon={<AddIcon/>}/>
       </Flex>
       {/* Popover */}
-      <Popover
-        isOpen={isOpen}
-        onClose={onClose}
-        placement="bottom-end"
-        closeOnBlur={false}
-        returnFocusOnClose={false}
-        initialFocusRef={inputRef}
-      >
-        <PopoverTrigger>
-          <Box/>
-        </PopoverTrigger>
-        <Portal>
-          <PopoverContent>
-            <PopoverArrow/>
-            <PopoverBody textAlign="center">
-              navigate with <Kbd>⬇︎</Kbd> and <Kbd>⬆︎</Kbd>
-            </PopoverBody>
-          </PopoverContent>
-        </Portal>
-      </Popover>
+      <Show above="lg">
+        <Popover
+          isOpen={isOpen}
+          onClose={onClose}
+          placement="bottom-end"
+          closeOnBlur={false}
+          returnFocusOnClose={false}
+          initialFocusRef={inputRef}
+        >
+          <PopoverTrigger>
+            <Box/>
+          </PopoverTrigger>
+          <Portal>
+            <PopoverContent>
+              <PopoverArrow/>
+              <PopoverBody textAlign="center">
+                navigate with <Kbd>⬇︎</Kbd> and <Kbd>⬆︎</Kbd>
+              </PopoverBody>
+            </PopoverContent>
+          </Portal>
+        </Popover>
+      </Show>
     </Box>
 
   )
