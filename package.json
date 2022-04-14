@@ -10,7 +10,8 @@
     "build:pwa": "tsc -p pwa && vite build pwa",
     "preview:pwa": "vite preview pwa",
     "dev:storybook": "cd storybook && start-storybook -p 6006",
-    "build:storybook": "cd storybook && build-storybook"
+    "build:storybook": "cd storybook && build-storybook",
+    "generate": "npx ts-node --project ./storybook/generate/tsconfig.json ./storybook/generate"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -43,7 +44,10 @@
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
     "babel-loader": "^8.2.4",
+    "change-case": "^4.1.2",
+    "colors": "^1.4.0",
     "concurrently": "^7.1.0",
+    "ts-node": "^10.7.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.0",
     "webpack": "^5.72.0"
