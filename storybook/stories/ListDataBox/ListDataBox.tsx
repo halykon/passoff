@@ -25,7 +25,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
       title: 'Copied!',
       description: 'Username copied to clipboard',
     })
-  })
+  }, [listData.username])
 
   return (
     <Stack spacing={5}>
