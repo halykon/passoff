@@ -18,13 +18,15 @@
     "baseUrl": ".",
     "paths": {
       "@sbc/*": ["../storybook/stories/*"],
-      "@sbh/*": ["../storybook/helper/*"]
+      "@sbh/*": ["../storybook/helper/*"],
+      "@sbhooks/*": ["../storybook/hooks/*"],
     }
   },
   "include": [
     "src", 
     "../storybook/stories",
-    "../storybook/helper"
+    "../storybook/helper",
+    "../storybook/hooks"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,14 +1,11 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Kbd, Stack, useBoolean, useToast } from '@chakra-ui/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import copy from 'copy-to-clipboard'
+import type { IData } from '../../hooks/data'
+import { useData } from '../../hooks/data'
 
-export interface IListData {
-  id: string
-  name: string
-  username: string
-  password: string
-}
+export interface IListData extends IData {}
 
 interface IListDataBoxProps {
   listData: IListData
@@ -18,6 +15,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
   const [isEditing, setIsEditing] = useBoolean()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
+  const { setDataById } = useData()
 
   const [edited, setEdited] = useState<Partial<IListData>>(listData)
 
@@ -31,6 +29,18 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
     setIsEditing.off()
     setEdited(listData)
   }, [setIsEditing, setEdited, listData])
+
+  const onSave = useCallback(() => {
+    setIsEditing.off()
+    setDataById?.(listData.id, edited)
+    toast({
+      title: 'Saved',
+      description: 'Your changes have been saved',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+  }, [edited, listData, setDataById, toast, setIsEditing])
 
   useHotkeys('right', () => buttonRef.current?.focus())
 
@@ -52,7 +62,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData }) => {
     <Stack spacing={5}>
       <Stack direction="row" justify="space-between">
         <Stack direction="row">
-          {isEditing && <Button className="selectable" onClick={setIsEditing.toggle}>Save</Button>}
+          {isEditing && <Button className="selectable" onClick={onSave}>Save</Button>}
           <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
         </Stack>
         <Button colorScheme="red">Delete</Button>
