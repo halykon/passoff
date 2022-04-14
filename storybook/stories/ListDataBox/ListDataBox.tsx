@@ -117,9 +117,9 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
           </InputGroup>
         </FormControl>
         <FormControl bg="gray.800" p="5px" borderRadius="md">
-          <FormLabel pl="4px" htmlFor="username">Password</FormLabel>
+          <FormLabel pl="4px" htmlFor="password">Password</FormLabel>
           <InputGroup>
-            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
+            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="password" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
               <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
             </InputRightElement>
