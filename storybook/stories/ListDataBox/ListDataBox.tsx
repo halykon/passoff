@@ -1,4 +1,5 @@
-import { Avatar, Box, Button, Center, FormControl, FormLabel, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, useBoolean, useToast } from '@chakra-ui/react'
+import { RepeatIcon } from '@chakra-ui/icons'
+import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import React, { useCallback, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -117,7 +118,24 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
           </InputGroup>
         </FormControl>
         <FormControl bg="gray.800" p="5px" borderRadius="md">
-          <FormLabel pl="4px" htmlFor="password">Password</FormLabel>
+          <FormLabel pl="4px" htmlFor="password">
+            <Stack direction="row" spacing="1">
+              <Box>Password</Box>
+              {isEditing && (
+                <Popover placement="top">
+                  <PopoverTrigger>
+                    <IconButton variant="ghost" size="xs" aria-label="regenerate password" icon={<RepeatIcon/>}/>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow/>
+                    <PopoverCloseButton/>
+                    <PopoverHeader>Generate New Password</PopoverHeader>
+                    <PopoverBody>This ui is not done yet.</PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </Stack>
+          </FormLabel>
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="password" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
