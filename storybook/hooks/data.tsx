@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import Fuse from 'fuse.js'
+import { useCallback, useMemo, useState } from 'react'
 import { createMetaStore } from './meta'
 
 export interface IData {
@@ -38,6 +39,7 @@ const testData = [
 
 const [DataProvider, useData] = createMetaStore(() => {
   const [data, setData] = useState<IData[]>(testData)
+  const fuse = useMemo(() => new Fuse(data, { keys: ['name', 'username'] }), [data])
 
   const setDataById = useCallback((id: string, data: Partial<IData>) => {
     setData(prev => prev.map(item => (item.id === id ? { ...item, ...data } : item)))
@@ -59,12 +61,17 @@ const [DataProvider, useData] = createMetaStore(() => {
     setData(prev => [...prev, { ...data, id: genId() }])
   }, [genId])
 
+  const searchData = useCallback((query: string) => {
+    return fuse.search(query).map(i => i.item)
+  }, [fuse])
+
   return {
     data,
     setData,
     setDataById,
     delDataById,
     addData,
+    searchData,
   }
 })
 

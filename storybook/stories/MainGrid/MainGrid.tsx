@@ -3,6 +3,7 @@ import type { MutableRefObject } from 'react'
 import React, { useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { useData } from '../../hooks/data'
 import type { IListData } from '../ListDataBox/ListDataBox'
 import { ListDataBox } from '../ListDataBox/ListDataBox'
 import { ListItem } from '../ListItem/ListItem'
@@ -12,13 +13,15 @@ interface IMainGridProps {
   list: IListData[]
 }
 
-export const MainGrid: React.FC<IMainGridProps> = ({ list }) => {
+export const MainGrid: React.FC<IMainGridProps> = () => {
+  const { data: list = [], searchData } = useData()
+
   const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
   const itemArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
 
   const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')
-  const filteredList = useMemo(() => list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()) || item.username.toLowerCase().includes(searchValue.toLowerCase())), [searchValue, list])
+  const filteredList = useMemo(() => searchValue && searchData ? searchData(searchValue) : list, [list, searchValue, searchData])
 
   useHotkeys('left', () => {
     const activeListItem = listArrowNavRef.current.querySelector<HTMLButtonElement>('[data-active]')
