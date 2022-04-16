@@ -1,7 +1,7 @@
 import { RepeatIcon } from '@chakra-ui/icons'
 import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import type { IData } from '../../hooks/data'
 import { useData } from '../../hooks/data'
@@ -11,15 +11,17 @@ export interface IListData extends IData {}
 interface IListDataBoxProps {
   listData: IListData
   onUnselect?: () => void
+  onReselect?: (id: string) => void
 }
 
-export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect }) => {
-  const [isEditing, setIsEditing] = useBoolean()
+export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect, onReselect }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
-  const { setDataById, delDataById } = useData()
-  const [edited, setEdited] = useState<Partial<IListData>>(listData)
+  const { setDataById, delDataById, addData, getDataById } = useData()
+  const [edited, setEdited] = useState<IListData>(listData)
   const [showPassword, setShowPassword] = useBoolean(false)
+  const isNewEntry = useMemo(() => !edited.id && !listData.id, [listData, edited])
+  const [isEditing, setIsEditing] = useBoolean(isNewEntry)
 
   const onEdit = useCallback((key: keyof IListData) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,12 +31,24 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
 
   const onCancel = useCallback(() => {
     setIsEditing.off()
-    setEdited(listData)
-  }, [setIsEditing, setEdited, listData])
+    if (listData.id) {
+      setEdited(listData)
+    }
+
+    const data = getDataById?.(edited.id)
+    if (data) setEdited(data)
+  }, [setIsEditing, setEdited, listData, getDataById, edited.id])
 
   const onSave = useCallback(() => {
     setIsEditing.off()
-    setDataById?.(listData.id, edited)
+
+    if (isNewEntry) {
+      const id = addData?.(edited)
+      if (id) setEdited({ ...edited, id })
+    } else {
+      setDataById?.(listData.id, edited)
+    }
+
     toast({
       title: 'Saved',
       description: 'Your changes have been saved',
@@ -42,7 +56,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
       duration: 5000,
       isClosable: true,
     })
-  }, [edited, listData, setDataById, toast, setIsEditing])
+  }, [edited, listData, setDataById, toast, setIsEditing, addData, isNewEntry])
 
   const copyData = useCallback((key: keyof IListData) => {
     return () => {
@@ -58,7 +72,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
   }, [edited, toast])
 
   const onDelete = useCallback(() => {
-    delDataById?.(listData.id)
+    if (!isNewEntry) delDataById?.(listData.id)
     onUnselect?.()
     toast({
       title: 'Deleted',
@@ -67,7 +81,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
       duration: 5000,
       isClosable: true,
     })
-  }, [toast, listData, delDataById, onUnselect])
+  }, [toast, listData, delDataById, onUnselect, isNewEntry])
 
   useHotkeys('right', () => buttonRef.current?.focus())
   useHotkeys('u', copyData('username'), [copyData])
@@ -81,8 +95,8 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
       <Stack spacing={5} padding={5}>
         <Stack direction="row" justify="space-between">
           <Stack direction="row">
-            {isEditing && <Button className="selectable" onClick={onSave}>Save</Button>}
-            <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>
+            {isEditing && <Button className="selectable" disabled={!edited.name} onClick={onSave}>Save</Button>}
+            {!isNewEntry && <Button className="selectable" ref={buttonRef} variant={isEditing ? 'ghost' : 'solid'} onClick={isEditing ? onCancel : setIsEditing.on}>{isEditing ? 'Cancel' : 'Edit'}</Button>}
           </Stack>
           <Popover>
             <PopoverTrigger>
@@ -113,7 +127,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('username')} value={edited.username}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
-              <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>
+              {!isNewEntry && <Button pointerEvents="all" onClick={copyData('username')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>U</Kbd></Button>}
             </InputRightElement>
           </InputGroup>
         </FormControl>
@@ -139,7 +153,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
           <InputGroup>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="password" onFocus={setShowPassword.on} onBlur={setShowPassword.off} type={showPassword ? 'text' : 'password'} onChange={onEdit('password')} value={edited.password}/>
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
-              <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>
+              {!isNewEntry && <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>}
             </InputRightElement>
           </InputGroup>
         </FormControl>

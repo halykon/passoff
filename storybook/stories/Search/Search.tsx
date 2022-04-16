@@ -6,9 +6,10 @@ import { useHotkeys } from 'react-hotkeys-hook'
 interface ISearchProps {
   value: string
   onValueChange: (value: string) => void
+  onCreateNew: () => void
 }
 
-export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
+export const Search: React.FC<ISearchProps> = ({ value, onValueChange, onCreateNew }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -30,7 +31,7 @@ export const Search: React.FC<ISearchProps> = ({ value, onValueChange }) => {
             </InputRightElement>
           </Show>
         </InputGroup>
-        <IconButton borderRadius="none" size="lg" aria-label="add" icon={<AddIcon/>}/>
+        <IconButton onClick={onCreateNew} borderRadius="none" size="lg" aria-label="add" icon={<AddIcon/>}/>
       </Flex>
       {/* Popover */}
       <Show above="lg">

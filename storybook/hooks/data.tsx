@@ -41,14 +41,6 @@ const [DataProvider, useData] = createMetaStore(() => {
   const [data, setData] = useState<IData[]>(testData)
   const fuse = useMemo(() => new Fuse(data, { keys: ['name', 'username'] }), [data])
 
-  const setDataById = useCallback((id: string, data: Partial<IData>) => {
-    setData(prev => prev.map(item => (item.id === id ? { ...item, ...data } : item)))
-  }, [])
-
-  const delDataById = useCallback((id: string) => {
-    setData(prev => prev.filter(item => item.id !== id))
-  }, [])
-
   const genId = useCallback((): string => {
     const id = Math.random().toString(36).slice(2)
     if (data.find(item => item.id === id)) {
@@ -57,9 +49,21 @@ const [DataProvider, useData] = createMetaStore(() => {
     return id
   }, [data])
 
-  const addData = useCallback((data: Omit<IData, 'id'>) => {
-    setData(prev => [...prev, { ...data, id: genId() }])
+  const addData = useCallback((data: IData) => {
+    const id = genId()
+    setData(prev => [...prev, { ...data, id }])
+    return id
   }, [genId])
+
+  const setDataById = useCallback((id: string, data: Partial<IData>) => {
+    setData(prev => prev.map(item => (item.id === id ? { ...item, ...data } : item)))
+  }, [])
+
+  const getDataById = useCallback((id: string) => data.find(item => item.id === id), [data])
+
+  const delDataById = useCallback((id: string) => {
+    setData(prev => prev.filter(item => item.id !== id))
+  }, [])
 
   const searchData = useCallback((query: string) => {
     return fuse.search(query).map(i => i.item)
@@ -69,6 +73,7 @@ const [DataProvider, useData] = createMetaStore(() => {
     data,
     setData,
     setDataById,
+    getDataById,
     delDataById,
     addData,
     searchData,

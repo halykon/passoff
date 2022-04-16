@@ -1,6 +1,6 @@
 import { Center, Grid, GridItem, Heading, Show } from '@chakra-ui/react'
 import type { MutableRefObject } from 'react'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useData } from '../../hooks/data'
@@ -23,6 +23,15 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
   const [searchValue, setSearchValue] = useState('')
   const filteredList = useMemo(() => searchValue && searchData ? searchData(searchValue) : list, [list, searchValue, searchData])
 
+  const onCreateNew = useCallback(() => {
+    setSelectedItem({
+      id: '',
+      name: '',
+      username: '',
+      password: '',
+    })
+  }, [setSelectedItem])
+
   useHotkeys('left', () => {
     const activeListItem = listArrowNavRef.current.querySelector<HTMLButtonElement>('[data-active]')
     if (activeListItem) return activeListItem.focus()
@@ -34,7 +43,7 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
   return (
     <Grid h="100%" templateColumns="repeat(2, 1fr)">
       <GridItem ref={listArrowNavRef} colSpan={[2, 2, 1]}>
-        <Search value={searchValue} onValueChange={setSearchValue}/>
+        <Search value={searchValue} onValueChange={setSearchValue} onCreateNew={onCreateNew}/>
         {filteredList.map(item => (
           <ListItem
             key={`pw-list-item-${item.id}`}
