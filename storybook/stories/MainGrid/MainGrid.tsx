@@ -10,7 +10,7 @@ import { ListItem } from '../ListItem/ListItem'
 import { Search } from '../Search/Search'
 
 interface IMainGridProps {
-  list: IListData[]
+
 }
 
 export const MainGrid: React.FC<IMainGridProps> = () => {
