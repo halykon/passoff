@@ -1,11 +1,14 @@
 import { extendTheme } from '@chakra-ui/react'
 import { addDecorator } from '@storybook/react'
 import { GlobalStyle, defaultTheme } from '../helper/theme'
+import { PwaProviders } from '../helper/providers'
 
 addDecorator(story => (
   <>
     <GlobalStyle/>
-    {story()}
+    <PwaProviders>
+      {story()}
+    </PwaProviders>
   </>
 ))
 

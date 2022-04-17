@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { decrypt, encrypt, generateCryptoKey, registerBiometric } from '../helper/crypto'
+import { useEffect, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { decrypt, encrypt, generateCryptoKey, registerBiometric, getBiometric } from '../helper/crypto'
 import { createMetaStore } from './meta'
 import { useStorage } from './storage'
 
 const [CryptoProvider, useCrypto] = createMetaStore(() => {
   const { readPresistentData, writePersistentData } = useStorage()
 
+  const [key, setKey] = useState<string>()
   const [keyHash, setKeyHash] = useState<string>()
   const [biometricId, setBiometricId] = useState<string>()
 
@@ -22,6 +23,7 @@ const [CryptoProvider, useCrypto] = createMetaStore(() => {
     const { key, keyHash } = await generateCryptoKey()
     writePersistentData?.('keyHash', keyHash)
     setKeyHash(keyHash)
+    setKey(key)
     return { key, keyHash }
   })
 
@@ -31,6 +33,13 @@ const [CryptoProvider, useCrypto] = createMetaStore(() => {
     setBiometricId(biometricId)
     return biometricId
   })
+
+  useAsync(async () => {
+    if (biometricId && !key) {
+      const key = await getBiometric(biometricId)
+      setKey(key)
+    }
+  }, [biometricId, key])
 
   const useEncrypt = useAsyncFn(encrypt)
   const useDecrypt = useAsyncFn(decrypt)
@@ -60,6 +69,8 @@ const [CryptoProvider, useCrypto] = createMetaStore(() => {
     useDecrypt,
     keyHash,
     biometricId,
+    getBiometric,
+    key,
   }
 })
 
