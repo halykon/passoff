@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo } from 'react'
 import { Box, Button } from '@chakra-ui/react'
+import React from 'react'
 import { useCrypto } from '../../hooks/crypto'
-import { getBiometric } from '../../helper/crypto'
-import { useAsync } from 'react-use'
 
 interface ICryptoLockProps {
 

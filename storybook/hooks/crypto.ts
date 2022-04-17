@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { decrypt, encrypt, generateCryptoKey, registerBiometric, getBiometric } from '../helper/crypto'
+import useAsync from 'react-use/lib/useAsync'
+import useAsyncFn from 'react-use/lib/useAsyncFn'
+import { decrypt, encrypt, generateCryptoKey, getBiometric, registerBiometric } from '../helper/crypto'
 import { createMetaStore } from './meta'
 import { useStorage } from './storage'
 
