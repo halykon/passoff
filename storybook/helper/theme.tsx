@@ -58,6 +58,34 @@ export const defaultTheme: Partial<ChakraTheme> = {
         focusBorderColor: 'primary.500',
       },
     },
+
+    PinInput: {
+      sizes: {
+        xl: {
+          height: '5rem',
+          width: '5rem',
+          borderRadius: 'lg',
+        },
+      },
+
+      variants: {
+        pinValid: {
+          bg: 'primary.500',
+          _hover: { bg: 'primary.400' },
+          _placeholderShown: { bg: 'whiteAlpha.50' },
+        },
+        pinInvalid: {
+          bg: 'red.500',
+          _hover: { bg: 'red.400' },
+          _placeholderShown: { bg: 'whiteAlpha.50' },
+          _active: { outline: 'red.500' },
+        },
+      },
+
+      defaultProps: {
+        focusBorderColor: 'primary.500',
+      },
+    },
   },
   config: {
     initialColorMode: 'dark',

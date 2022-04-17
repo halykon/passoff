@@ -62,7 +62,7 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
               )
             : (
               <Center h="100%">
-                <Heading size="xl" opacity={0.1}>No item selected</Heading>
+                <Heading size="xl" opacity={0.1}>Oi. No item selected</Heading>
               </Center>
               )}
         </GridItem>

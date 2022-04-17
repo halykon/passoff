@@ -11,9 +11,14 @@ const [StorageProvider, useStorage] = createMetaStore(() => {
     return localStorage.getItem(key)
   }, [])
 
+  const deletePersistentData = useCallback((key: string) => {
+    localStorage.removeItem(key)
+  }, [])
+
   return {
     writePersistentData,
     readPresistentData,
+    deletePersistentData,
   }
 })
 

@@ -6,11 +6,13 @@ import { createMetaStore } from './meta'
 import { useStorage } from './storage'
 
 const [CryptoProvider, useCrypto] = createMetaStore(() => {
-  const { readPresistentData, writePersistentData } = useStorage()
+  const { readPresistentData, writePersistentData, deletePersistentData } = useStorage()
 
   const [key, setKey] = useState<string>()
   const [keyHash, setKeyHash] = useState<string>()
   const [biometricId, setBiometricId] = useState<string>()
+  const [encryptedKey, setEncryptedKey] = useState<string>()
+  const [presistentLoaded, setPresistentLoaded] = useState(false)
 
   useEffect(() => {
     const keyHash = readPresistentData?.('keyHash') // this will be async in the future
@@ -18,59 +20,51 @@ const [CryptoProvider, useCrypto] = createMetaStore(() => {
 
     const biometricId = readPresistentData?.('biometricId')
     if (biometricId) setBiometricId(biometricId)
+
+    const encryptedKey = readPresistentData?.('encryptedKey')
+    if (encryptedKey) setEncryptedKey(encryptedKey)
+
+    setPresistentLoaded(true)
   }, [readPresistentData])
 
-  const useGenerateCryptoKey = useAsyncFn(async () => {
-    const { key, keyHash } = await generateCryptoKey()
-    writePersistentData?.('keyHash', keyHash)
-    setKeyHash(keyHash)
-    setKey(key)
-    return { key, keyHash }
-  })
+  useAsync(async () => {
+    if (!presistentLoaded) return
+    if (!encryptedKey && !key) {
+      const { key, keyHash } = await generateCryptoKey()
+      writePersistentData?.('keyHash', keyHash)
+      setKeyHash(keyHash)
+      setKey(key)
 
-  const useRegisterBiometric = useAsyncFn(async (secret: string) => {
+      // clear old key data if exists
+      deletePersistentData?.('encryptedKey')
+      setEncryptedKey(undefined)
+      deletePersistentData?.('biometricId')
+      setBiometricId(undefined)
+    }
+  }, [keyHash, key, presistentLoaded])
+
+  useAsync(async () => {
+    if (!presistentLoaded) return
+    if (biometricId && encryptedKey && !key) {
+      const key = await getBiometric(biometricId)
+      setKey(key)
+    }
+  }, [biometricId, key, presistentLoaded])
+
+  const [registerBiometricResult, registerBiometricAsync] = useAsyncFn(async (secret: string) => {
     const biometricId = await registerBiometric(secret)
     if (biometricId) writePersistentData?.('biometricId', biometricId)
     setBiometricId(biometricId)
     return biometricId
   })
 
-  useAsync(async () => {
-    if (biometricId && !key) {
-      const key = await getBiometric(biometricId)
-      setKey(key)
-    }
-  }, [biometricId, key])
-
-  const useEncrypt = useAsyncFn(encrypt)
-  const useDecrypt = useAsyncFn(decrypt)
-
-  // let encrypted = readPresistentData?.('encrypted')
-  // let biometricId = readPresistentData?.('biometricId')
-  // if (!encrypted || !biometricId) {
-  //   if (!generateCryptoKey || !encrypt || !registerBiometric) return
-  //   const { key, keyHash } = await generateCryptoKey()
-  //   console.log({ key, keyHash })
-  //   encrypted = await encrypt(key, 'test data to be encrypted')
-  //   writePersistentData?.('keyHash', keyHash)
-  //   writePersistentData?.('encrypted', encrypted)
-
-  //   biometricId = await registerBiometric(key)
-  //   writePersistentData?.('biometricId', biometricId ?? '')
-  // }
-
-  // const key = await getBiometric?.(biometricId ?? '')
-  // const decrypted = await decrypt?.(key ?? '', encrypted)
-  // console.log({ decrypted })
-
   return {
-    useGenerateCryptoKey,
-    useRegisterBiometric,
-    useEncrypt,
-    useDecrypt,
+    registerBiometricResult,
+    registerBiometricAsync,
+
     keyHash,
     biometricId,
-    getBiometric,
+    encryptedKey,
     key,
   }
 })

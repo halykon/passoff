@@ -5,6 +5,10 @@ export async function registerBiometric (secret: string) {
       challenge: new Uint8Array(0),
       rp: { name: 'passoff' },
       pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+      authenticatorSelection: {
+        authenticatorAttachment: 'platform',
+        requireResidentKey: true,
+      },
     },
   })
 
@@ -52,6 +56,24 @@ export async function extractCryptoKey (key: string) {
   const iv = cryptUintArray.slice(-4)
 
   return { rawKey, iv }
+}
+
+export async function passphraseEncrypt (passphrase: string, data: string) {
+  const digest = await crypto.subtle.digest('SHA-256', Uint8Array.from(passphrase, c => c.charCodeAt(0)))
+  const key = await crypto.subtle.importKey('raw', digest, { name: 'AES-CBC' }, false, ['encrypt', 'decrypt'])
+  const iv = crypto.getRandomValues(new Uint8Array(16))
+  const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, Uint8Array.from(data, c => c.charCodeAt(0)))
+  return btoa(String.fromCharCode(...new Uint8Array(iv), ...new Uint8Array(encrypted)))
+}
+
+export async function passphraseDecrypt (passphrase: string, encryptedData: string) {
+  const digest = await crypto.subtle.digest('SHA-256', Uint8Array.from(passphrase, c => c.charCodeAt(0)))
+  const key = await crypto.subtle.importKey('raw', digest, { name: 'AES-CBC' }, false, ['encrypt', 'decrypt'])
+  const cryptUintArray = Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0))
+  const iv = cryptUintArray.slice(0, 16)
+  const encrypted = cryptUintArray.slice(16)
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, encrypted)
+  return new TextDecoder().decode(decrypted)
 }
 
 export async function importCryptoKey (key: string) {
