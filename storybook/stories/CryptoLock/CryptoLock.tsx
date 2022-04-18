@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Icon, PinInput, PinInputField, Stack } from '@chakra-ui/react'
+import { Box, Button, Center, Divider, Flex, Heading, Icon, PinInput, PinInputField, Stack } from '@chakra-ui/react'
 import React from 'react'
 import { useCrypto } from '../../hooks/crypto'
 import { FaFingerprint, FaKey } from 'react-icons/fa'
@@ -42,6 +42,7 @@ export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
       <Center height="100%">
         <FocusLock>
           <Stack spacing="5">
+            <Heading size="md" textAlign="center">Create New Pin</Heading>
             {pinInput}
             <Flex justify="space-between">
               <Button isDisabled={Boolean(biometricId)} color={biometricId ? 'primary.500' : 'inherit'} variant="ghost" onClick={() => registerBiometricAsync?.(key)}>
@@ -63,6 +64,11 @@ export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
                 </Stack>
               </Button>
             </Flex>
+            <Divider/>
+            <Stack align="center">
+              <Box>or</Box>
+              <Button>Import Backup</Button>
+            </Stack>
           </Stack>
         </FocusLock>
       </Center>
