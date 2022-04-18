@@ -13,11 +13,12 @@ const pulsate = keyframes`
 interface IListItemProps {
   name: string
   username: string
+  image?: string
   isActive?: boolean
   onSelect?: () => void
 }
 
-export const ListItem: React.FC<IListItemProps> = ({ onSelect, isActive, name, username }) => {
+export const ListItem: React.FC<IListItemProps> = ({ onSelect, isActive, name, username, image }) => {
   return (
     <>
       <Box p="2px" transition=".35s" bg={isActive ? 'blackAlpha.500' : ''} _hover={{ bg: 'blackAlpha.300' }} _focusWithin={{ bg: 'var(--chakra-colors-blackAlpha-500) !important' }}>
@@ -35,7 +36,7 @@ export const ListItem: React.FC<IListItemProps> = ({ onSelect, isActive, name, u
           }}
         >
           <Stack direction="row" spacing="15px" color="white">
-            <Avatar name={name}/>
+            <Avatar p="2.5px" name={name} src={image} bg={image && 'white'}/>
             <Box>
               <Heading size="md">{name}</Heading>
               <Text size="md">{username}</Text>

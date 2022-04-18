@@ -51,6 +51,7 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
             isActive={selectedItem?.id === item.id}
             name={item.name}
             username={item.username}
+            image={item.image}
           />
         ))}
       </GridItem>

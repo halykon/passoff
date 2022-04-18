@@ -11,6 +11,7 @@ export interface IData {
   password: string
   url?: string
   color?: string
+  image?: string
   deleted?: boolean
 }
 

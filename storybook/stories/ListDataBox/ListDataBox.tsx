@@ -1,9 +1,9 @@
 import { RepeatIcon } from '@chakra-ui/icons'
 import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { urlStripper } from '../../helper/url'
+import { fetchMeta, isValidUrl, urlAddProtocol, urlStripper } from '../../helper/url'
 import type { IData } from '../../hooks/data'
 import { useData } from '../../hooks/data'
 
@@ -12,10 +12,9 @@ export interface IListData extends IData {}
 interface IListDataBoxProps {
   listData: IListData
   onUnselect?: () => void
-  onReselect?: (id: string) => void
 }
 
-export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect, onReselect }) => {
+export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const toast = useToast()
   const { setDataById, delDataById, addData, getDataById } = useData()
@@ -89,10 +88,27 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect,
   useHotkeys('u', copyData('username'), [copyData])
   useHotkeys('p', copyData('password'), [copyData])
 
+  useEffect(() => {
+    async function loadMeta () {
+      if (edited.url) {
+        const urlWithProtocol = urlAddProtocol(edited.url)
+        if (isValidUrl(urlWithProtocol)) {
+          return fetchMeta(urlWithProtocol).then(meta => {
+            setEdited(prev => ({ ...prev, image: meta.favicon, color: meta.color }))
+          })
+        }
+      }
+
+      setEdited(prev => ({ ...prev, image: undefined, color: undefined }))
+    }
+
+    loadMeta()
+  }, [edited.url])
+
   return (
     <Box>
-      <Center w="100%" h="150px" bg="primary.600">
-        <Avatar size="xl" name={edited.name}/>
+      <Center w="100%" h="150px" bg={edited.color ?? 'primary.600'}>
+        <Avatar p="5px" size="xl" name={edited.name} src={edited.image} bg={edited.image && 'white'}/>
       </Center>
       <Stack spacing={5} padding={5}>
         <Stack direction="row" justify="space-between">
