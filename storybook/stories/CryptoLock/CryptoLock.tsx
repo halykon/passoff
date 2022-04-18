@@ -1,9 +1,8 @@
-import { Box, Button, Center, Divider, Flex, Heading, Icon, PinInput, PinInputField, Stack } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Button, Center, Divider, Flex, Heading, PinInput, PinInputField, Stack } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import { useCrypto } from '../../hooks/crypto'
 import { FaFingerprint, FaKey } from 'react-icons/fa'
 import FocusLock from '@chakra-ui/focus-lock'
-import useAsync from 'react-use/lib/useAsync'
 
 interface ICryptoLockProps {
 
@@ -13,15 +12,18 @@ export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
   const { registerBiometricAsync, biometricId, encryptedKey, setEncryptedKey, key, setKey, keyHash, passphraseDecrypt, passphraseEncrypt } = useCrypto()
   const [pin, setPin] = React.useState('')
 
-  useAsync(async () => {
+  useEffect(() => {
     if (!encryptedKey) return
     if (pin.length < 6) return
     if (!passphraseDecrypt) return
 
-    const decryptedKey = await passphraseDecrypt(pin, encryptedKey).catch(() => null)
-    if (decryptedKey) {
-      setKey?.(decryptedKey)
-    }
+    passphraseDecrypt(pin, encryptedKey)
+      .catch(() => null)
+      .then(decryptedKey => {
+        if (decryptedKey) {
+          setKey?.(decryptedKey)
+        }
+      })
   }, [encryptedKey, pin, passphraseDecrypt, setKey])
 
   const pinInput = (
