@@ -89,7 +89,15 @@ export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
     return (
       <Center height="100%">
         <FocusLock>
-          {pinInput}
+          <Stack spacing="5">
+            <Heading size="md" textAlign="center">Enter Your Pin</Heading>
+            {pinInput}
+            <Divider/>
+            <Stack align="center">
+              <Box>or</Box>
+              <Button>Import Backup</Button>
+            </Stack>
+          </Stack>
         </FocusLock>
       </Center>
     )
