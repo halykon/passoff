@@ -1,6 +1,8 @@
 import Fuse from 'fuse.js'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCrypto } from './crypto'
 import { createMetaStore } from './meta'
+import { useStorage } from './storage'
 
 export interface IData {
   id: string
@@ -38,8 +40,28 @@ const testData = [
 ]
 
 const [DataProvider, useData] = createMetaStore(() => {
-  const [data, setData] = useState<IData[]>(testData)
+  const { readPresistentData, writePersistentData, deletePersistentData } = useStorage()
+  const { key, encrypt, decrypt } = useCrypto()
+  const [data, setData] = useState<IData[]>([])
   const fuse = useMemo(() => new Fuse(data, { keys: ['name', 'username'] }), [data])
+
+  useEffect(() => {
+    if (!key) return
+    const encryptedData = readPresistentData?.('data')
+    if (!encryptedData) return
+    decrypt?.(key, encryptedData).then(dataStr => {
+      setData(JSON.parse(dataStr))
+    })
+  }, [key, decrypt, readPresistentData])
+
+  useEffect(() => {
+    if (!key) return
+    if (!data.length) return
+    const dataStr = JSON.stringify(data)
+    encrypt?.(key, dataStr).then(encryptedData => {
+      writePersistentData?.('data', encryptedData)
+    })
+  }, [key, encrypt, writePersistentData, data])
 
   const genId = useCallback((): string => {
     const id = Math.random().toString(36).slice(2)

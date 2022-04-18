@@ -8,6 +8,7 @@ const [StorageProvider, useStorage] = createMetaStore(() => {
   }, [])
 
   const readPresistentData = useCallback((key: string) => {
+    console.log('read from localStorage', key)
     return localStorage.getItem(key)
   }, [])
 

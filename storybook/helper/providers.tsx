@@ -5,10 +5,10 @@ import { StorageProvider } from '../hooks/storage'
 
 export const PwaProviders: React.FC = ({ children }) => (
   <StorageProvider>
-    <DataProvider>
-      <CryptoProvider>
+    <CryptoProvider>
+      <DataProvider>
         {children}
-      </CryptoProvider>
-    </DataProvider>
+      </DataProvider>
+    </CryptoProvider>
   </StorageProvider>
 )
