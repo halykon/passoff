@@ -3,7 +3,7 @@ import React from 'react'
 import { useCrypto } from '../../hooks/crypto'
 import { FaFingerprint, FaKey } from 'react-icons/fa'
 import FocusLock from '@chakra-ui/focus-lock'
-import { useAsync } from 'react-use'
+import useAsync from 'react-use/lib/useAsync'
 
 interface ICryptoLockProps {
 
