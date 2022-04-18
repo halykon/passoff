@@ -1,8 +1,9 @@
 import { RepeatIcon } from '@chakra-ui/icons'
-import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
+import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { urlStripper } from '../../helper/url'
 import type { IData } from '../../hooks/data'
 import { useData } from '../../hooks/data'
 
@@ -23,9 +24,10 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect,
   const isNewEntry = useMemo(() => !edited.id && !listData.id, [listData, edited])
   const [isEditing, setIsEditing] = useBoolean(isNewEntry)
 
-  const onEdit = useCallback((key: keyof IListData) => {
+  const onEdit = useCallback((key: keyof IListData, processor?: (value: string) => string) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEdited({ ...edited, [key]: event.target.value })
+      const value = processor ? processor(event.target.value) : event.target.value
+      setEdited({ ...edited, [key]: value })
     }
   }, [edited, setEdited])
 
@@ -58,7 +60,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect,
     })
   }, [edited, listData, setDataById, toast, setIsEditing, addData, isNewEntry])
 
-  const copyData = useCallback((key: keyof IListData) => {
+  const copyData = useCallback((key: keyof Omit<IListData, 'deleted'>) => {
     return () => {
       const data = edited[key]
       if (data) {
@@ -155,6 +157,13 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect,
             <InputRightElement pointerEvents="none" h="100%" w="100%" justifyContent="flex-end" opacity=".35">
               {!isNewEntry && <Button pointerEvents="all" onClick={copyData('password')} variant="ghost" fontWeight="normal" gap="5px">copy <Kbd>P</Kbd></Button>}
             </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <FormControl bg="gray.800" p="5px" borderRadius="md">
+          <FormLabel pl="4px" htmlFor="url">Website</FormLabel>
+          <InputGroup>
+            <InputLeftAddon bg="whiteAlpha.100">https</InputLeftAddon>
+            <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('url', urlStripper)} value={edited.url}/>
           </InputGroup>
         </FormControl>
       </Stack>

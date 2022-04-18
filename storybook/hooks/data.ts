@@ -9,35 +9,10 @@ export interface IData {
   name: string
   username: string
   password: string
+  url?: string
+  color?: string
+  deleted?: boolean
 }
-
-// replace with db store later
-const testData = [
-  {
-    id: '1',
-    name: 'Google',
-    username: 'johann@objekt.stream',
-    password: 'supersecret42',
-  },
-  {
-    id: '2',
-    name: 'Facebook',
-    username: 'johann@objekt.stream',
-    password: 'supersecret42',
-  },
-  {
-    id: '3',
-    name: 'Twitter',
-    username: 'undefined_prop',
-    password: 'supersecret42',
-  },
-  {
-    id: '4',
-    name: 'Instagram',
-    username: 'johann@objekt.stream',
-    password: 'supersecret42',
-  },
-]
 
 const [DataProvider, useData] = createMetaStore(() => {
   const { readPresistentData, writePersistentData, deletePersistentData } = useStorage()
