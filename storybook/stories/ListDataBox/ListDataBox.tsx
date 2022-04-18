@@ -90,6 +90,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
 
   useEffect(() => {
     async function loadMeta () {
+      if (!isEditing) return
       if (edited.url) {
         const urlWithProtocol = urlAddProtocol(edited.url)
         if (isValidUrl(urlWithProtocol)) {
@@ -103,7 +104,7 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
     }
 
     loadMeta()
-  }, [edited.url])
+  }, [edited.url, isEditing])
 
   return (
     <Box>
