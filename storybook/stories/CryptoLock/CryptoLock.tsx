@@ -9,7 +9,7 @@ interface ICryptoLockProps {
 }
 
 export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
-  const { registerBiometricAsync, biometricId, encryptedKey, setEncryptedKey, key, setKey, keyHash, passphraseDecrypt, passphraseEncrypt } = useCrypto()
+  const { registerBiometric, setBiometricId, biometricId, encryptedKey, setEncryptedKey, key, setKey, passphraseDecrypt, passphraseEncrypt } = useCrypto()
   const [pin, setPin] = React.useState('')
 
   useEffect(() => {
@@ -47,7 +47,15 @@ export const CryptoLock: React.FC<ICryptoLockProps> = ({ children }) => {
             <Heading size="md" textAlign="center">Create New Pin</Heading>
             {pinInput}
             <Flex justify="space-between">
-              <Button isDisabled={Boolean(biometricId)} color={biometricId ? 'primary.500' : 'inherit'} variant="ghost" onClick={() => registerBiometricAsync?.(key)}>
+              <Button
+                isDisabled={Boolean(biometricId)}
+                color={biometricId ? 'primary.500' : 'inherit'}
+                variant="ghost"
+                onClick={async () => {
+                  const biometricId = await registerBiometric?.(key)
+                  setBiometricId?.(biometricId)
+                }}
+              >
                 <Stack direction="row">
                   <FaFingerprint/>
                   <Box>{biometricId ? 'Registered' : 'Register'} Biometric</Box>

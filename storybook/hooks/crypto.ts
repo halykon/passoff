@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import useAsync from 'react-use/lib/useAsync'
-import useAsyncFn from 'react-use/lib/useAsyncFn'
 import { generateCryptoKey, getBiometric, registerBiometric, passphraseEncrypt, passphraseDecrypt, getHash, encrypt, decrypt } from '../helper/crypto'
 import { createMetaStore } from './meta'
 import { useStorage } from './storage'
@@ -34,45 +32,41 @@ const [CryptoProvider, useCrypto] = createMetaStore(() => {
     if (encryptedKey) writePersistentData?.('encryptedKey', encryptedKey)
   }, [keyHash, biometricId, encryptedKey, writePersistentData])
 
-  useAsync(async () => {
+  useEffect(() => {
     if (!presistentLoaded) return
     if (!encryptedKey && !key) {
-      const { key, keyHash } = await generateCryptoKey()
-      setKeyHash(keyHash)
-      setKey(key)
+      generateCryptoKey().then(({ key, keyHash }) => {
+        setKeyHash(keyHash)
+        setKey(key)
 
-      // clear old key data if exists
-      deletePersistentData?.('encryptedKey')
-      setEncryptedKey(undefined)
-      deletePersistentData?.('biometricId')
-      setBiometricId(undefined)
+        // clear old key data if exists
+        deletePersistentData?.('encryptedKey')
+        setEncryptedKey(undefined)
+        deletePersistentData?.('biometricId')
+        setBiometricId(undefined)
+      })
     }
-  }, [keyHash, key, presistentLoaded])
+  }, [keyHash, key, presistentLoaded, encryptedKey, deletePersistentData])
 
-  useAsync(async () => {
+  useEffect(() => {
     if (!presistentLoaded) return
     if (biometricId && encryptedKey && !key) {
-      const key = await getBiometric(biometricId)
-      setKey(key)
+      getBiometric(biometricId).then(key => {
+        setKey(key)
+      })
     }
-  }, [biometricId, key, presistentLoaded])
+  }, [biometricId, key, presistentLoaded, encryptedKey])
 
-  useAsync(async () => {
+  useEffect(() => {
     if (key && keyHash) {
-      const hash = await getHash(key)
-      console.log('key hash valid', hash === keyHash)
+      getHash(key).then(hash => {
+        console.log('key hash valid', hash === keyHash)
+      })
     }
   }, [key, keyHash])
 
-  const [registerBiometricResult, registerBiometricAsync] = useAsyncFn(async (secret: string) => {
-    const biometricId = await registerBiometric(secret)
-    setBiometricId(biometricId)
-    return biometricId
-  })
-
   return {
-    registerBiometricResult,
-    registerBiometricAsync,
+    registerBiometric,
     keyHash,
     setKeyHash,
     biometricId,
