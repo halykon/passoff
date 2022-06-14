@@ -102,3 +102,32 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
     </Grid>
   )
 }
+
+MainGrid.defaultProps = {
+  list: [
+    {
+      id: '1',
+      name: 'Google',
+      username: 'johann@objekt.stream',
+      password: 'supersecret42',
+    },
+    {
+      id: '2',
+      name: 'Facebook',
+      username: 'johann@objekt.stream',
+      password: 'supersecret42',
+    },
+    {
+      id: '3',
+      name: 'Twitter',
+      username: 'undefined_prop',
+      password: 'supersecret42',
+    },
+    {
+      id: '4',
+      name: 'Instagram',
+      username: 'johann@objekt.stream',
+      password: 'supersecret42',
+    },
+  ],
+}
