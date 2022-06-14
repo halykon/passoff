@@ -1,3 +1,5 @@
+import * as B64ArrayBuffer from 'base64-arraybuffer'
+import { Base64 } from 'js-base64'
 export async function registerBiometric (secret: string) {
   const credential: any = await navigator.credentials.create({
     publicKey: {
@@ -90,13 +92,17 @@ export async function generateCryptoKey () {
 }
 
 export async function encrypt (key: string, data: string) {
+  const encoder = new TextEncoder()
   const { cryptoKey, iv } = await importCryptoKey(key)
-  const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, Uint8Array.from(data, c => c.charCodeAt(0)))
-  return btoa(String.fromCharCode(...new Uint8Array(encrypted)))
+  const encrypted: ArrayBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, encoder.encode(data))
+  return B64ArrayBuffer.encode(encrypted)
 }
 
 export async function decrypt (key: string, encryptedData: string) {
+  const decoder = new TextDecoder()
+  const encoder = new TextEncoder()
   const { cryptoKey, iv } = await importCryptoKey(key)
-  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0)))
-  return String.fromCharCode(...new Uint8Array(decrypted))
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, Uint8Array.from(Base64.atob(encryptedData), c => c.charCodeAt(0)))
+  console.log(decrypted)
+  return decoder.decode(decrypted)
 }
