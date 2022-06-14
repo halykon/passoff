@@ -1,13 +1,16 @@
-import { Center, Grid, GridItem, Heading, Show } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Heading, Show, useDisclosure } from '@chakra-ui/react'
 import type { MutableRefObject } from 'react'
 import React, { useCallback, useMemo, useState } from 'react'
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useData } from '../../hooks/data'
+import type { MykiExportPassword } from '../../types/imports/myki'
+import { ImportModal } from '../ImportModal/ImportModal'
 import type { IListData } from '../ListDataBox/ListDataBox'
 import { ListDataBox } from '../ListDataBox/ListDataBox'
 import { ListItem } from '../ListItem/ListItem'
 import { Search } from '../Search/Search'
+import { Virtuoso } from 'react-virtuoso'
 
 interface IMainGridProps {
 
@@ -18,7 +21,8 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
 
   const listArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
   const itemArrowNavRef: MutableRefObject<HTMLDivElement> = useArrowKeyNavigationHook({ selectors: '.selectable' })
-
+  const { isOpen: isImportModalOpen, onOpen: onImportModalOpen, onClose: onImportModalCloseDisclosure } = useDisclosure()
+  const [importData, setImportData] = useState<MykiExportPassword[]>([])
   const [selectedItem, setSelectedItem] = useState<IListData | null>(null)
   const [searchValue, setSearchValue] = useState('')
   const filteredList = useMemo(() => searchValue && searchData ? searchData(searchValue) : list, [list, searchValue, searchData])
@@ -32,6 +36,16 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
     })
   }, [setSelectedItem])
 
+  const onImport = useCallback((data: MykiExportPassword[]) => {
+    setImportData(data)
+    onImportModalOpen()
+  }, [onImportModalOpen])
+
+  const onImportModalClose = useCallback(() => {
+    setImportData([])
+    onImportModalCloseDisclosure()
+  }, [onImportModalCloseDisclosure])
+
   useHotkeys('left', () => {
     const activeListItem = listArrowNavRef.current.querySelector<HTMLButtonElement>('[data-active]')
     if (activeListItem) return activeListItem.focus()
@@ -43,8 +57,24 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
   return (
     <Grid h="100%" templateColumns="repeat(2, 1fr)">
       <GridItem ref={listArrowNavRef} colSpan={[2, 2, 1]}>
-        <Search value={searchValue} onValueChange={setSearchValue} onCreateNew={onCreateNew}/>
-        {filteredList.map(item => (
+        <Search value={searchValue} onValueChange={setSearchValue} onCreateNew={onCreateNew} onImport={onImport}/>
+        <Virtuoso
+          overscan={400}
+          style={{ height: 'calc(100vh - 48px)' }}
+          data={filteredList}
+          totalCount={filteredList.length}
+          itemContent={(index, item) => (
+            <ListItem
+              key={`pw-list-item-${item.id}`}
+              onSelect={() => setSelectedItem(item)}
+              isActive={selectedItem?.id === item.id}
+              name={item.name}
+              username={item.username}
+              image={item.image}
+            />
+          )}
+        />
+        {/* {filteredList.map(item => (
           <ListItem
             key={`pw-list-item-${item.id}`}
             onSelect={() => setSelectedItem(item)}
@@ -53,7 +83,7 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
             username={item.username}
             image={item.image}
           />
-        ))}
+        ))} */}
       </GridItem>
       <Show above="md">
         <GridItem bg="blackAlpha.400" ref={itemArrowNavRef}>
@@ -68,35 +98,7 @@ export const MainGrid: React.FC<IMainGridProps> = () => {
               )}
         </GridItem>
       </Show>
+      <ImportModal data={importData} isOpen={isImportModalOpen} onOpen={onImportModalOpen} onClose={onImportModalClose}/>
     </Grid>
   )
-}
-
-MainGrid.defaultProps = {
-  list: [
-    {
-      id: '1',
-      name: 'Google',
-      username: 'johann@objekt.stream',
-      password: 'supersecret42',
-    },
-    {
-      id: '2',
-      name: 'Facebook',
-      username: 'johann@objekt.stream',
-      password: 'supersecret42',
-    },
-    {
-      id: '3',
-      name: 'Twitter',
-      username: 'undefined_prop',
-      password: 'supersecret42',
-    },
-    {
-      id: '4',
-      name: 'Instagram',
-      username: 'johann@objekt.stream',
-      password: 'supersecret42',
-    },
-  ],
 }
