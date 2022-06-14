@@ -97,7 +97,9 @@ export const GlobalStyle: React.FC = () => (
   <Global
     styles={css`
       @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap');
-
+      :root {
+        color-scheme: dark
+      }
       ::selection {
         color: white;
         background-color: ${colors.primary[500]};
