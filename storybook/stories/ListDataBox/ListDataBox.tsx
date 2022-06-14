@@ -1,5 +1,5 @@
-import { RepeatIcon } from '@chakra-ui/icons'
-import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
+import { RepeatIcon, ExternalLinkIcon } from '@chakra-ui/icons'
+import { Avatar, Box, Button, Center, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, InputRightElement, Kbd, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Portal, Stack, Tooltip, useBoolean, useToast } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -181,6 +181,12 @@ export const ListDataBox: React.FC<IListDataBoxProps> = ({ listData, onUnselect 
           <InputGroup>
             <InputLeftAddon bg="whiteAlpha.100">https</InputLeftAddon>
             <Input className="selectable" disabled={!isEditing} cursor="text !important" variant="filled" id="username" type="text" onChange={onEdit('url', urlStripper)} value={edited.url}/>
+            {!isEditing && (
+              <InputRightElement>
+                <IconButton as="a" href={edited.url} target="_blank" aria-label="Open External Website" h="1.75rem" size="sm" icon={<ExternalLinkIcon/>}/>
+              </InputRightElement>
+            )}
+
           </InputGroup>
         </FormControl>
       </Stack>
