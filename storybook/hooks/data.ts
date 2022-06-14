@@ -34,23 +34,26 @@ const [DataProvider, useData] = createMetaStore(() => {
     if (!key) return
     if (!data.length) return
     const dataStr = JSON.stringify(data)
+    console.time('encrypt')
     encrypt?.(key, dataStr).then(encryptedData => {
       writePersistentData?.('data', encryptedData)
+      console.timeEnd('encrypt')
     })
   }, [key, encrypt, writePersistentData, data])
 
   const genId = useCallback((): string => {
-    const id = Math.random().toString(36).slice(2)
-    if (data.find(item => item.id === id)) {
-      return genId()
-    }
-    return id
-  }, [data])
+    return Math.random().toString(36).slice(2) + Date.now().toString(36)
+  }, [])
 
   const addData = useCallback((data: IData) => {
     const id = genId()
     setData(prev => [...prev, { ...data, id }])
     return id
+  }, [genId])
+
+  const addBatch = useCallback((data: Array<Omit<IData, 'id'>>) => {
+    const dataWithId = data.map(e => ({ ...e, id: genId() }))
+    setData(prev => [...prev, ...dataWithId])
   }, [genId])
 
   const setDataById = useCallback((id: string, data: Partial<IData>) => {
@@ -74,6 +77,7 @@ const [DataProvider, useData] = createMetaStore(() => {
     getDataById,
     delDataById,
     addData,
+    addBatch,
     searchData,
   }
 })
